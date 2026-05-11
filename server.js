@@ -13,6 +13,10 @@ const client = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 });
 
+app.get("/", (req, res) => {
+    res.send("Server OK");
+});
+
 app.post("/chat", async (req, res) => {
 
     try {
@@ -27,11 +31,7 @@ app.post("/chat", async (req, res) => {
             messages: [
                 {
                     role: "system",
-                    content: `
-                    Bạn là ChemAI.
-                    Trợ lý hóa học chuyên giải bài tập,
-                    phản ứng hóa học và kiến thức THPT.
-                    `
+                    content: "Bạn là ChemAI"
                 },
 
                 {
@@ -42,7 +42,8 @@ app.post("/chat", async (req, res) => {
         });
 
         res.json({
-            reply: completion.choices[0]
+            reply:
+                completion.choices[0]
                 .message.content
         });
 
@@ -51,11 +52,13 @@ app.post("/chat", async (req, res) => {
         console.log(err);
 
         res.status(500).json({
-            reply: "Lỗi AI server"
+            reply: "AI Error"
         });
     }
 });
 
-app.listen(3000, () => {
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
     console.log("Server running");
 });
