@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "chem-ai-server",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
@@ -9,6 +9,6 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
-    "openai": "^5.12.2"
+    "openai": "^5.23.2"
   }
 }
