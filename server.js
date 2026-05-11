@@ -3,21 +3,13 @@ const cors = require("cors");
 
 const app = express();
 
-app.use(cors({
-    origin: true,
-    credentials: true
-}));
-
+app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-    res.send("Server OK");
-});
+const PORT = process.env.PORT || 8080;
 
 app.post("/chat", async (req, res) => {
-
     try {
-
         const userMessage = req.body.message;
 
         const response = await fetch(
@@ -26,17 +18,12 @@ app.post("/chat", async (req, res) => {
                 method: "POST",
 
                 headers: {
-                    "Authorization":
-                        `Bearer ${process.env.OPENROUTER_API_KEY}`,
-
-                    "Content-Type":
-                        "application/json"
+                    "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+                    "Content-Type": "application/json"
                 },
 
                 body: JSON.stringify({
-
-                    model:
-                        "meta-llama/llama-3.1-8b-instruct:free",
+                    model: "meta-llama/llama-3.1-8b-instruct:free",
 
                     messages: [
                         {
@@ -50,23 +37,25 @@ app.post("/chat", async (req, res) => {
 
         const data = await response.json();
 
+        console.log(data);
+
         res.json({
-            reply:
-                data.choices[0].message.content
+            reply: data.choices?.[0]?.message?.content || "AI không phản hồi"
         });
 
     } catch (err) {
-
         console.log(err);
 
         res.status(500).json({
-            reply: "AI Error"
+            error: "Server error"
         });
     }
 });
 
-const PORT = process.env.PORT || 8080;
+app.get("/", (req, res) => {
+    res.send("Server running");
+});
 
-app.listen(PORT, "0.0.0.0", () => {
-    console.log("Running on " + PORT);
+app.listen(PORT, () => {
+    console.log("Server running on " + PORT);
 });
