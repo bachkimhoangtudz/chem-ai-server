@@ -31,7 +31,7 @@ app.post("/chat", async (req, res) => {
             messages: [
                 {
                     role: "system",
-                    content: "Bạn là ChemAI"
+                    content: "Bạn là ChemAI, trợ lý hóa học."
                 },
 
                 {
