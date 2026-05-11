@@ -20,12 +20,17 @@ app.post("/chat", async (req, res) => {
                 method: "POST",
 
                 headers: {
-                    "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-                    "Content-Type": "application/json"
+                    "Authorization":
+                        `Bearer ${process.env.OPENROUTER_API_KEY}`,
+
+                    "Content-Type":
+                        "application/json"
                 },
 
                 body: JSON.stringify({
-                    model: "meta-llama/llama-3.1-8b-instruct:free",
+
+                    model:
+                        "mistralai/mistral-7b-instruct:free",
 
                     messages: [
                         {
@@ -43,8 +48,8 @@ app.post("/chat", async (req, res) => {
 
         res.json({
             reply:
-                data.choices?.[0]?.message?.content ||
-                "AI không phản hồi"
+                data.choices?.[0]?.message?.content
+                || "AI không phản hồi"
         });
 
     } catch (err) {
@@ -52,7 +57,7 @@ app.post("/chat", async (req, res) => {
         console.log(err);
 
         res.status(500).json({
-            error: "Server error"
+            reply: "AI Error"
         });
     }
 });
@@ -62,5 +67,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log("Server running on " + PORT);
+    console.log("Running on " + PORT);
 });
