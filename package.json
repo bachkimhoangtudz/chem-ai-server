@@ -6,8 +6,8 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "openai": "^5.23.2"
+    "express": "^5.1.0"
   }
 }
