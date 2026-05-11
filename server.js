@@ -16,15 +16,12 @@ app.post("/chat", async (req, res) => {
             "https://openrouter.ai/api/v1/chat/completions",
             {
                 method: "POST",
-
                 headers: {
                     "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
                     "Content-Type": "application/json"
                 },
-
                 body: JSON.stringify({
                     model: "meta-llama/llama-3.1-8b-instruct:free",
-
                     messages: [
                         {
                             role: "user",
@@ -40,7 +37,9 @@ app.post("/chat", async (req, res) => {
         console.log(data);
 
         res.json({
-            reply: data.choices?.[0]?.message?.content || "AI không phản hồi"
+            reply:
+                data.choices?.[0]?.message?.content ||
+                "AI không phản hồi"
         });
 
     } catch (err) {
