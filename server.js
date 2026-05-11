@@ -1,8 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-
 const app = express();
 
 app.use(cors({
@@ -11,10 +9,6 @@ app.use(cors({
 }));
 
 app.use(express.json());
-
-const genAI = new GoogleGenerativeAI(
-    process.env.GEMINI_API_KEY
-);
 
 app.get("/", (req, res) => {
     res.send("Server OK");
@@ -26,18 +20,39 @@ app.post("/chat", async (req, res) => {
 
         const userMessage = req.body.message;
 
-        const model = genAI.getGenerativeModel({
-            model: "gemini-1.5-flash"
-        });
+        const response = await fetch(
+            "https://openrouter.ai/api/v1/chat/completions",
+            {
+                method: "POST",
 
-        const result = await model.generateContent(userMessage);
+                headers: {
+                    "Authorization":
+                        `Bearer ${process.env.OPENROUTER_API_KEY}`,
 
-        const response = await result.response;
+                    "Content-Type":
+                        "application/json"
+                },
 
-        const text = response.text();
+                body: JSON.stringify({
+
+                    model:
+                        "deepseek/deepseek-chat-v3-0324:free",
+
+                    messages: [
+                        {
+                            role: "user",
+                            content: userMessage
+                        }
+                    ]
+                })
+            }
+        );
+
+        const data = await response.json();
 
         res.json({
-            reply: text
+            reply:
+                data.choices[0].message.content
         });
 
     } catch (err) {
