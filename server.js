@@ -40,7 +40,7 @@ app.post("/chat", async (req, res) => {
                 body: JSON.stringify({
 
                     model:
-                        "qwen/qwen3-32b:free",
+                        "google/gemini-flash-1.5",
 
                     messages: [
                         {
