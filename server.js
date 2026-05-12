@@ -29,7 +29,7 @@ app.post("/chat", async (req, res) => {
                         "application/json",
 
                     "HTTP-Referer":
-                        "https://your-site.up.railway.app",
+                        "https://railway.app",
 
                     "X-Title":
                         "ChemAI"
@@ -67,7 +67,7 @@ app.post("/chat", async (req, res) => {
         console.log(err);
 
         res.json({
-            reply: "Lỗi server AI"
+            reply: "Lỗi AI server"
         });
     }
 });
@@ -75,5 +75,8 @@ app.post("/chat", async (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log("Server running");
+
+    console.log(
+        "Server running on port " + PORT
+    );
 });
