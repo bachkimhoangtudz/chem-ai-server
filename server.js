@@ -40,7 +40,7 @@ app.post("/chat", async (req, res) => {
                 body: JSON.stringify({
 
                     model:
-                        "deepseek/deepseek-chat-v3-0324:free",
+                        "google/gemma-3-27b-it:free",
 
                     messages: [
                         {
