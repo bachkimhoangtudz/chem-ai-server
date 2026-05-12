@@ -38,8 +38,8 @@ app.post("/chat", async (req, res) => {
 
                     model:
                         "model:
-                            "deepseek/deepseek-chat-v3-0324:free",
-
+                        "deepseek/deepseek-chat-v3-0324:free",
+                }
                     messages: [
                         {
                             role: "user",
