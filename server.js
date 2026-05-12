@@ -1,12 +1,14 @@
 const express = require("express");
 const cors = require("cors");
+const fetch = require("node-fetch");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-const PORT = process.env.PORT || 8080;
+const OPENROUTER_API_KEY =
+    process.env.OPENROUTER_API_KEY;
 
 app.post("/chat", async (req, res) => {
 
@@ -21,16 +23,22 @@ app.post("/chat", async (req, res) => {
 
                 headers: {
                     "Authorization":
-                        `Bearer ${process.env.OPENROUTER_API_KEY}`,
+                        `Bearer ${OPENROUTER_API_KEY}`,
 
                     "Content-Type":
-                        "application/json"
+                        "application/json",
+
+                    "HTTP-Referer":
+                        "https://your-site.up.railway.app",
+
+                    "X-Title":
+                        "ChemAI"
                 },
 
                 body: JSON.stringify({
 
                     model:
-                        "mistralai/mistral-7b-instruct:free",
+                        "meta-llama/llama-3-8b-instruct:free",
 
                     messages: [
                         {
@@ -46,26 +54,26 @@ app.post("/chat", async (req, res) => {
 
         console.log(data);
 
+        const reply =
+            data.choices?.[0]?.message?.content
+            || "AI không phản hồi";
+
         res.json({
-            reply:
-                data.choices?.[0]?.message?.content
-                || "AI không phản hồi"
+            reply
         });
 
     } catch (err) {
 
         console.log(err);
 
-        res.status(500).json({
-            reply: "AI Error"
+        res.json({
+            reply: "Lỗi server AI"
         });
     }
 });
 
-app.get("/", (req, res) => {
-    res.send("Server running");
-});
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log("Running on " + PORT);
+    console.log("Server running");
 });
