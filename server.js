@@ -6,14 +6,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const OPENROUTER_API_KEY =
-    process.env.OPENROUTER_API_KEY;
+app.get("/", (req, res) => {
+    res.send("ChemAI server running");
+});
 
 app.post("/chat", async (req, res) => {
 
     try {
 
         const userMessage = req.body.message;
+
+        console.log("User:", userMessage);
 
         const response = await fetch(
             "https://openrouter.ai/api/v1/chat/completions",
@@ -22,7 +25,7 @@ app.post("/chat", async (req, res) => {
 
                 headers: {
                     "Authorization":
-                        `Bearer ${OPENROUTER_API_KEY}`,
+                        `Bearer ${process.env.OPENROUTER_API_KEY}`,
 
                     "Content-Type":
                         "application/json",
@@ -37,9 +40,8 @@ app.post("/chat", async (req, res) => {
                 body: JSON.stringify({
 
                     model:
-                        "model:
                         "deepseek/deepseek-chat-v3-0324:free",
-                }
+
                     messages: [
                         {
                             role: "user",
@@ -52,11 +54,29 @@ app.post("/chat", async (req, res) => {
 
         const data = await response.json();
 
-        console.log(data);
+        console.log(
+            JSON.stringify(data, null, 2)
+        );
+
+        if (data.error) {
+
+            return res.json({
+                reply:
+                    "OpenRouter lỗi: " +
+                    data.error.message
+            });
+        }
 
         const reply =
-            data.choices?.[0]?.message?.content
-            || "AI không phản hồi";
+            data.choices?.[0]?.message?.content;
+
+        if (!reply) {
+
+            return res.json({
+                reply:
+                    "Model không trả nội dung."
+            });
+        }
 
         res.json({
             reply
@@ -67,7 +87,8 @@ app.post("/chat", async (req, res) => {
         console.log(err);
 
         res.json({
-            reply: "Lỗi AI server"
+            reply:
+                "Server crash."
         });
     }
 });
