@@ -40,7 +40,7 @@ app.post("/chat", async (req, res) => {
                 body: JSON.stringify({
 
                     model:
-                        "nousresearch/deephermes-3-mistral-24b-preview:free",
+                        "undi95/toppy-m-7b:free",
 
                     messages: [
                         {
