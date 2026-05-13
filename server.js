@@ -7,7 +7,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-    res.send("ChemAI server running");
+    res.send("ChemAI Groq Server Running");
 });
 
 app.post("/chat", async (req, res) => {
@@ -19,30 +19,30 @@ app.post("/chat", async (req, res) => {
         console.log("User:", userMessage);
 
         const response = await fetch(
-            "https://openrouter.ai/api/v1/chat/completions",
+            "https://api.groq.com/openai/v1/chat/completions",
             {
                 method: "POST",
 
                 headers: {
                     "Authorization":
-                        `Bearer ${process.env.OPENROUTER_API_KEY}`,
+                        `Bearer ${process.env.GROQ_API_KEY}`,
 
                     "Content-Type":
-                        "application/json",
-
-                    "HTTP-Referer":
-                        "https://railway.app",
-
-                    "X-Title":
-                        "ChemAI"
+                        "application/json"
                 },
 
                 body: JSON.stringify({
 
                     model:
-                        "gryphe/mythomist-7b:free",
+                        "llama-3.3-70b-versatile",
 
                     messages: [
+                        {
+                            role: "system",
+                            content:
+                                "Bạn là trợ lý AI hóa học thông minh tên ChemAI."
+                        },
+
                         {
                             role: "user",
                             content: userMessage
@@ -62,7 +62,7 @@ app.post("/chat", async (req, res) => {
 
             return res.json({
                 reply:
-                    "OpenRouter lỗi: " +
+                    "Groq lỗi: " +
                     data.error.message
             });
         }
@@ -74,7 +74,7 @@ app.post("/chat", async (req, res) => {
 
             return res.json({
                 reply:
-                    "Model không trả nội dung."
+                    "AI không phản hồi."
             });
         }
 
